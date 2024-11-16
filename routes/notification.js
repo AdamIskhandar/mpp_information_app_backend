@@ -7,7 +7,7 @@ import Student from '../models/Student.js';
 import INFORMATION from '../models/Information.js';
 import MPP from '../models/Mpp.js';
 import Notification from '../models/Notification.js';
-import MppNotification from '../models/mppNotification.js';
+import MppNotification from '../models/MppNotification.js';
 
 dotenv.config();
 
