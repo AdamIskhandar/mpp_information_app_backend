@@ -330,12 +330,10 @@ router.post('/search', auth, async (req, res) => {
 
 	queryStrings.forEach((element) => {
 		allEventQueries.push({
-			name: { $regex: String(element) },
 			student_id: { $regex: String(element) },
 		});
 		allInfoQueries.push({
 			MPP_id: { $regex: String(element) },
-			name: { $regex: String(element) },
 		});
 	});
 
