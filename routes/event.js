@@ -164,6 +164,54 @@ router.post('/add_event_join', auth, async (req, res) => {
 	}
 });
 
+// add the event to student event join
+router.post('/cancel_event_join', auth, async (req, res) => {
+	const studentID = req.body.studentID;
+	const eventID = req.body.eventID;
+
+	try {
+		const getStudent = await Student.findOne({
+			_id: studentID,
+		});
+
+		const getEvent = await EVENT.findOne({
+			_id: eventID,
+		});
+
+		if (!getStudent) {
+			res.status(403).json({
+				message: 'cannot find this student',
+			});
+		}
+
+		if (!eventID) {
+			res.status(403).json({
+				message: 'cannot find this event',
+			});
+		}
+
+		const removeEvent = await getStudent.updateOne({
+			$pull: {
+				event_join: {
+					eventID,
+				},
+			},
+		});
+
+		const removeStudent = await getEvent.updateOne({
+			$pull: {
+				attendees: {
+					studentID,
+				},
+			},
+		});
+
+		res.json(true);
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
+
 // ROUTE TO START THE EVENT
 router.post('/start_event', auth, async (req, res) => {
 	const event_id = req.body.eventID;

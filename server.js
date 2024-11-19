@@ -74,6 +74,7 @@ app.use('/event', eventRoutes);
 app.use('/feedback', feedBackRoutes);
 
 app.use('/notification', noficationRoutes);
+
 app.use('/payment', paymentRoutes);
 
 app.listen(PORT, () => {
