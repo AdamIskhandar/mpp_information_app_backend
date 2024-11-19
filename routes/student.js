@@ -321,6 +321,34 @@ router.post('/addFcmToken', auth, async (req, res) => {
 	}
 });
 
+// SEARCH STUDENT
+router.post('/search', auth, async (req, res) => {
+	const queryString = req.body.searchInput;
+	const queryStrings = queryString.split(' ');
+	var allEventQueries = [];
+	var allInfoQueries = [];
+
+	queryStrings.forEach((element) => {
+		allEventQueries.push({
+			name: { $regex: String(element) },
+			student_id: { $regex: String(element) },
+		});
+		allInfoQueries.push({
+			MPP_id: { $regex: String(element) },
+			name: { $regex: String(element) },
+		});
+	});
+
+	const allStudent = await Student.find({ $or: allEventQueries });
+	const allMPP = await MPP.find({ $or: allInfoQueries });
+	if (!allStudent && !allMPP) {
+		return res
+			.status(400)
+			.json({ message: 'No found Anything Student Or MPP' });
+	}
+	return res.status(200).json({ allStudent: allStudent, allMPP: allMPP });
+});
+
 // get user data
 router.get('/', auth, async (req, res) => {
 	const student = await Student.findById(req.user);
